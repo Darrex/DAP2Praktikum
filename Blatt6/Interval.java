@@ -25,7 +25,7 @@ public class Interval implements Comparable<Interval>{
 			return 0;
 		}
 		else{
-			return -11;
+			return -1;
 		}
 	}
 }
