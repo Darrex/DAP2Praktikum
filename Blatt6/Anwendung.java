@@ -72,4 +72,14 @@ public class Anwendung{
 		}
 		System.out.println("]");
 	}
+	public static int[] latenessScheduling(ArrayList<Job> jobs){
+		int n = jobs.size();
+		int[] a = new int[n];
+		int z = 0;
+		for (i=0;i<n;i++) {
+			a[i] = z;
+			z = z + jobs.get(i).getDauer();
+		}
+		return a;
+	}
 }
