@@ -107,6 +107,7 @@ public class Anwendung{
 			}
 			System.out.println("]");
 			li = latenessScheduling(ein);
+			System.out.println("Berechnetes Latenessscheduling:");
 			System.out.print("[");
 			for (int i = 0; i < li.length-1 ; i++ ) {
 				if(i != li.length - 2){
