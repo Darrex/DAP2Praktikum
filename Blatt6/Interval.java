@@ -14,7 +14,7 @@ public class Interval implements Comparable<Interval>{
 		return ende;
 	}
 	public String toString(){
-		String s = "Startzeit:" + Integer.toString(start) + "Endzeit:" + Integer.toString(ende) + "Diffenrenz:" + Integer.toString(ende-start);
+		String s = "[" + start + "," + ende + "]";
 		return s;
 	}
 	public int compareTo(Interval other){

@@ -10,7 +10,7 @@ public class Anwendung{
 		int n = intervals.size();
 		ArrayList<Interval> erg = new ArrayList<Interval>();
 		erg.add(intervals.get(0));
-		int j = 1;
+		int j = 0;
 		for (int i = 1; i < n; i++){
 			if(intervals.get(i).getStart() >= intervals.get(j).getEnd()){
 				erg.add(intervals.get(i));
@@ -21,9 +21,19 @@ public class Anwendung{
 	}
 
 	public static void main(String[] args) throws Exception {
+		if(args.length < 0){
+			throw new Exception("Zu wenige Parameter eingegeben!");
+		}
+		if(args.length > 2){
+			throw new Exception("Zu viele Parameter eingegeben");
+		}
+		if(!args[0].equals("Interval") && !args[0].equals("Lateness")){
+			throw new Exception("Lateness oder Intervallscheduling wählen");
+		}
+		ArrayList<Job> ein = new ArrayList<Job>();
 		ArrayList<Interval> eing = new ArrayList<Interval>();
-		RandomAccessFile file = new RandomAccessFile(args[0],"r");
-		System.out.println("Bearbeite Datei" + args[0]);
+		RandomAccessFile file = new RandomAccessFile(args[1],"r");
+		System.out.println("Bearbeite Datei" + args[1]);
 		int counter = 0;
 		while(true){
 			try{	
@@ -31,7 +41,12 @@ public class Anwendung{
 				StringTokenizer st = new StringTokenizer(zeile,",");
 				int start = Integer.parseInt(st.nextToken());
 				int ende = Integer.parseInt(st.nextToken());
-				eing.add(new Interval(start,ende));
+				if(args[0].equals("Interval")){
+					eing.add(new Interval(start,ende));
+				}
+				else{
+					ein.add(new Job(start,ende));
+				}
 				counter++;
 			}
 			catch(NullPointerException b){break;}
@@ -45,41 +60,91 @@ public class Anwendung{
 				break;
 			}
 		}
-		Interval[] li = new Interval[eing.size()];
-		li = eing.toArray(li);
-		System.out.println("Es wurden " + counter + " Zeilen mit folgendem Inhalt gelesen:");
-		System.out.print("[");
-		for (int i = 0; i < li.length ; i++) {
-			System.out.print("[" + li[i].getStart() + "," + li[i].getEnd() + "]");	
+		if(args[0].equals("Interval")){
+			Interval[] li = new Interval[eing.size()];
+			li = eing.toArray(li);
+			System.out.println("Es wurden " + counter + " Zeilen mit folgendem Inhalt gelesen:");
+			System.out.print("[");
+			for (int i = 0; i < li.length ; i++) {
+				System.out.print(li[i].toString());	
+			}
+			System.out.println("]");
+			Collections.sort(eing);
+			li = eing.toArray(li);
+			System.out.println("Sortiert:");
+			System.out.print("[");
+			for (int i = 0; i<li.length ;i++ ) {
+				System.out.print(li[i].toString());
+			}
+			System.out.println("]");
+			ArrayList<Interval> erg = new ArrayList<Interval>();
+			erg = intervalScheduling(eing);
+			Interval[] mi = new Interval[erg.size()];
+			mi = erg.toArray(mi);
+			System.out.println("Berechnetes Intervallscheduling:");
+			System.out.print("[");
+			for (int i = 0; i < mi.length ;i++ ) {
+				System.out.print(mi[i].toString());
+			}
+			System.out.println("]");	
 		}
-		System.out.println("]");
-		Collections.sort(eing);
-		li = eing.toArray(li);
-		System.out.println("Sortiert:");
-		System.out.print("[");
-		for (int i = 0; i<li.length ;i++ ) {
-			System.out.print("[" + li[i].getStart() + "," + li[i].getEnd() + "]");
+		if(args[0].equals("Lateness")){
+			Job[] e = new Job[ein.size()];
+			e = ein.toArray(e);
+			System.out.println("Es wurden " + counter + " Zeilen mit folgendem Inhalt gelesen:");
+			System.out.print("[");
+			for (int i = 0; i< e.length ;i++ ) {
+				System.out.print(e[i].toString());
+			}
+			System.out.println("]");
+			Collections.sort(ein);
+			e = ein.toArray(e);
+			int[] li = new int[ein.size()];
+			System.out.println("Sortiert:");
+			System.out.print("[");
+			for (int i = 0; i < e.length ; i++ ) {
+				System.out.print(e[i].toString());
+			}
+			System.out.println("]");
+			li = latenessScheduling(ein);
+			System.out.print("[");
+			for (int i = 0; i < li.length-1 ; i++ ) {
+				if(i != li.length - 2){
+					System.out.print(li[i]+ ",");
+				}
+				else{
+					System.out.print(li[i]);
+				}
+			}
+			System.out.println("]");
+			System.out.println("Maximale Verspätung: " + verspaetung(li[li.length-1], ein));
 		}
-		System.out.println("]");
-		ArrayList<Interval> erg = new ArrayList<Interval>();
-		erg = intervalScheduling(eing);
-		Interval[] mi = new Interval[erg.size()];
-		mi = erg.toArray(li);
-		System.out.println("Berechnetes Intervallscheduling:");
-		System.out.print("[");
-		for (int i = 0; i < mi.length ;i++ ) {
-			System.out.print("[" + mi[i].getStart() + "," + mi[i].getEnd() + "]");
-		}
-		System.out.println("]");
+		
 	}
 	public static int[] latenessScheduling(ArrayList<Job> jobs){
 		int n = jobs.size();
-		int[] a = new int[n];
+		int[] a = new int[n+1];
 		int z = 0;
-		for (i=0;i<n;i++) {
+		int i = 0;
+		while (i<n) {
 			a[i] = z;
 			z = z + jobs.get(i).getDauer();
+			i++;
 		}
+		a[i] = z;
 		return a;
+	}	
+	public static int verspaetung(int a, ArrayList<Job> jobs){
+		int i = 0;
+		int n = jobs.size();
+		int max = jobs.get(i).getDeadline();
+		while(i<n-1){
+			if(jobs.get(i+1).getDeadline() > jobs.get(i).getDeadline()){
+				max = jobs.get(i+1).getDeadline();
+			}
+			i++;
+		}
+		int erg = a-max;
+		return erg;
 	}
 }

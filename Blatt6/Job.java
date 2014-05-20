@@ -13,7 +13,7 @@ public class Job implements Comparable<Job>{
 		return dead;
 	}
 	public String toString(){
-		String s = "Dauer:" + Integer.toString(dauer) + "Deadline:" + Integer.toString(dead);
+		String s = "[" + dauer + "," + dead + "]";
 		return s;
 	}
 	public int compareTo(Job other){
