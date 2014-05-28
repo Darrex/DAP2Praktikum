@@ -1,22 +1,22 @@
 public class Job implements Comparable<Job>{
-	int dauer;
+	int dauer;								//Deklarieren der Klassenvariablen
 	int dead;
 
-	public Job(int a, int b){
+	public Job(int a, int b){				//Konstruktor
 		dauer = a;
-		dead = b;
+		dead = b;	
 	}
-	public int getDauer(){
+	public int getDauer(){					//Rückgabe der Intervalldauer
 		return dauer;
 	}
-	public int getDeadline(){
+	public int getDeadline(){				//Rückgabe der Deadline
 		return dead;
 	}
-	public String toString(){
+	public String toString(){				//String Ausgabe des Jobs
 		String s = "[" + dauer + "," + dead + "]";
 		return s;
 	}
-	public int compareTo(Job other){
+	public int compareTo(Job other){		//compareTo zum vergleichen
 		if(this.getDeadline() > other.getDeadline()){
 			return 1;
 		}
