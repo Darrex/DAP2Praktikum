@@ -1,12 +1,12 @@
 import java.util.LinkedList;
 
-public class Hashtable
+public class HashTable
 {
-	private LinkedList[] hashtabelle;
+	private LinkedList<HashItem>[] hashtabelle;
 	private int hashsize;
 
 
-	public Hashtable(int hashsize)
+	public HashTable(int hashsize)
 	{
 		this.hashsize = hashsize;
 		hashtabelle = new LinkedList[hashsize];
@@ -18,12 +18,12 @@ public class Hashtable
 		if(hash < 0){
 			hash = hash * (-1);
 		}
-		int wert = hash % hashsize;
-		boolean vorhanden = false:
+		int wert =(int) (hash % hashsize);
+		boolean vorhanden = false;
 		for (int i = 0; i < hashtabelle[wert].size() ;i++ ) {
-			if(hashtabelle[wert].get(i).getKey() == key){
+			if(hashtabelle[wert].get(i).getKey().equals(key)){
 				vorhanden = true;
-				hashtabelle[wert].setInfo(hashtabelle[wert].getInfo() + 1);
+				hashtabelle[wert].get(i).setInfo(hashtabelle[wert].get(i).getInfo() + 1);
 			}
 		}
 		if(!vorhanden){
@@ -34,12 +34,12 @@ public class Hashtable
 	public HashItem get(String key){
 		long hash = GeneralHashFunctionLibrary.RSHash(key);
 		if(hash < 0){
-			hash 0 hash +(-1);
+			hash = hash *(-1);
 		}
-		int wert = hash % hashsize
-		for(int i = 0; i <hashtabelle[wert].size())
+		int wert = (int) (hash % hashsize);
+		for(int i = 0; i <hashtabelle[wert].size(); i++)
 		{
-			if(hashtabelle[wert].get(i).getKey == key){
+			if(hashtabelle[wert].get(i).getKey().equals(key)){
 				return hashtabelle[wert].get(i);
 			}
 		}
@@ -66,9 +66,9 @@ public class Hashtable
 			System.out.println("--------------------------------------------------------");
 			System.out.println("Hash items with hash value " + i + ":");
 			for(int j = 0; j < hashtabelle[i].size(); j++){
-				System.out.println("key: " + hashtabelle[i].get(j).getKey() + "		-- info: " + hashtabelle[i].get(j).getInfo);
+				System.out.println("key: " + hashtabelle[i].get(j).getKey() + "		-- info: " + hashtabelle[i].get(j).getInfo());
 			}
-			System.out.println("--------------------------------------------------------")
+			System.out.println("--------------------------------------------------------");
 		}
 		System.out.println("The number of collisions is " + numberOfCollisions());
 		System.out.println("*********************************************************");
