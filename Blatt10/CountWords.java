@@ -125,20 +125,20 @@ public class CountWords{
   };
   
   public static void main(String[] args){
-    if(args.length < 1 || args.length > 3){
+    if(args.length < 2 || args.length > 3){								//Zu viele zu wenige Parameter abfangen
     	System.out.println("zwischen 1 und 3 Parameter eingeben!");
     	return;
     }
     String hash;
     int hashsize;
-    if(args.length == 2){
-    	if(args[1].equals("RSHash") || args[1].equals("JSHash")){
+    if(args.length == 2){												//bei 2 Eingaben
+    	if(args[1].equals("RSHash") || args[1].equals("JSHash")){		//wenn 2. eingabe die hashfunktion angibt, wird size auf 10 gesetzt
     		hashsize = 10;
     		hash = args[1];
     	}
-    	else{
+    	else{															//sonst hashfunktion auf rshash
     		try{
-    			hashsize = Integer.parseInt(args[1]);
+    			hashsize = Integer.parseInt(args[1]);					
     			hash = "RSHash";
     		}
     		catch(Exception e){
@@ -147,7 +147,7 @@ public class CountWords{
     		}
     	}
     }
-    else{
+    else{																//3 Eingaben
     	hash = args[2];
     	try{
     		hashsize = Integer.parseInt(args[1]);
@@ -157,10 +157,10 @@ public class CountWords{
     		return;
     	}
     }
-    HashTable test = new HashTable(hashsize);
-    RandomAccessFile file;
+    HashTable test = new HashTable(hashsize);							//neuen Hashtable mit hashsize erzeugen
+    RandomAccessFile file;												
     try{
-    	file = new RandomAccessFile(args[0],"r");
+    	file = new RandomAccessFile(args[0],"r");						//Randomaccessfile erzeugen
     }
     catch(Exception e){
     	System.out.println("File not Found");
@@ -168,18 +168,18 @@ public class CountWords{
     }
     String line;
     try{
-    	line = file.readLine();
+    	line = file.readLine();											//lines auslesen
     	if(line != null){
-    		StringTokenizer st = new StringTokenizer(line, " ");
-    		while(st.hasMoreTokens()){
-    			test.put(st.nextToken());
+    		StringTokenizer st = new StringTokenizer(line, " ");		//Strinktokenizer
+    		while(st.hasMoreTokens()){									//solange es noch tokens gibt
+    			test.put(st.nextToken(),hash);							//Einfügen
     		}
     	}
     }
     catch(Exception e){
     	System.out.println("Fehler beim Lesen von Zeilen");
     }  
-    test.printHashTable();
+    test.printHashTable();												//Ausgeben
   }
   
 }
